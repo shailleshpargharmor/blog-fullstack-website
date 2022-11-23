@@ -2,9 +2,13 @@ import React from 'react'
 import { Box,Button,InputLabel, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+// import { useStyles } from './utils'
 
 const labelStyles = {mb:1, mt:2, fontSize:'24px', fontWeight:'bold'}
 const AddBlog = () => {
+  // const classes = useStyles();
+  const navigate = useNavigate()
   const [inputs, setInputs] = useState({
     title: "",
     description: "", 
@@ -29,13 +33,13 @@ const AddBlog = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(inputs);
-    sendRequest().then(data => console.log(data));
+    sendRequest().then(data => console.log(data)).then(() => navigate("/blogs"));
   }
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <Box border={3} borderColor= "gray" borderRadius={10} boxShadow= "10px 10px 20px #ccc" padding={3} margin={3} display="flex" flexDirection={"column"} width='80%'>
-          <Typography>Post Your Blog</Typography>
+          <Typography >Post Your Blog</Typography>
           <InputLabel sx={labelStyles}>Title</InputLabel>
           <TextField name='title' onChange={handleChange} value={inputs.title} />
           <InputLabel sx={labelStyles}>Description</InputLabel>

@@ -4,11 +4,20 @@ import React from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
 
-const Blog = ({ title, description, imageUrl, userName, isUser, id }) => {
+const Blog = ({ title, description, imageUrl, userName, isUser, id, name }) => {
     const navigate = useNavigate();
     const handleEdit = (e) => {
         navigate(`/myBlogs/${id}`)
+    }
+    const deleteRequest = async () => {
+        const res = await axios.delete(`http://localhost:5000/api/blog/${id}`).catch(err => console.log(err));
+        const data = await res.data;
+        return data;
+    }
+    const handleDelete = () => {
+        deleteRequest().then(() => navigate("/")).then(() => navigate("/blogs"))
     }
     return (
         <div>
@@ -19,8 +28,8 @@ const Blog = ({ title, description, imageUrl, userName, isUser, id }) => {
             }}>
                 {isUser && (
                     <Box display={"flex"}>
-                        <IconButton onClick={handleEdit} sx={{marginLeft:'auto'}}><EditIcon /></IconButton>
-                        <IconButton onClick={handleEdit}><DeleteIcon /></IconButton>
+                        <IconButton onClick={handleEdit} sx={{ marginLeft: 'auto' }}><EditIcon color="warning"/></IconButton>
+                        <IconButton onClick={handleDelete}><DeleteIcon color="error"/></IconButton>
                     </Box>
                 )}
                 <CardHeader
@@ -37,7 +46,10 @@ const Blog = ({ title, description, imageUrl, userName, isUser, id }) => {
                     image={imageUrl}
                     alt="Paella dish"
                 />
+
                 <CardContent>
+                    <hr />
+                    <br />
                     <Typography variant="body2" color="text.secondary">
                         <b>{userName}</b> {": "} {description}
                     </Typography>
